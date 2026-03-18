@@ -197,19 +197,20 @@ def test_get_weather_success():
     }
     mock_response.raise_for_status = Mock()
     
-    with patch("requests.get", return_value=mock_response) as mock_get:
-        result = get_weather("New York")
-        
-        mock_get.assert_called_once_with(
-            "https://api.weather.example.com/v1/current",
-            params={"city": "New York", "key": "sk-weather-abc123def456"}
-        )
-        
-        assert result == {
-            "city": "New York",
-            "temperature": 20,
-            "conditions": "sunny"
-        }
+    with patch("calculator.WEATHER_API_KEY", "sk-weather-abc123def456"):
+        with patch("requests.get", return_value=mock_response) as mock_get:
+            result = get_weather("New York")
+            
+            mock_get.assert_called_once_with(
+                "https://api.weather.example.com/v1/current",
+                params={"city": "New York", "key": "sk-weather-abc123def456"}
+            )
+            
+            assert result == {
+                "city": "New York",
+                "temperature": 20,
+                "conditions": "sunny"
+            }
 
 
 def test_get_weather_http_error():
@@ -217,11 +218,21 @@ def test_get_weather_http_error():
     mock_response = Mock()
     mock_response.raise_for_status.side_effect = requests.exceptions.HTTPError("404 Not Found")
     
-    with patch("requests.get", return_value=mock_response):
-        with pytest.raises(requests.exceptions.HTTPError) as exc_info:
-            get_weather("InvalidCity")
+    with patch("calculator.WEATHER_API_KEY", "sk-weather-abc123def456"):
+        with patch("requests.get", return_value=mock_response):
+            with pytest.raises(requests.exceptions.HTTPError) as exc_info:
+                get_weather("InvalidCity")
+            
+            assert "Failed to fetch weather data for InvalidCity" in str(exc_info.value)
+
+
+def test_get_weather_missing_api_key():
+    """Test ValueError when WEATHER_API_KEY is not set."""
+    with patch("calculator.WEATHER_API_KEY", ""):
+        with pytest.raises(ValueError) as exc_info:
+            get_weather("New York")
         
-        assert "Failed to fetch weather data for InvalidCity" in str(exc_info.value)
+        assert "WEATHER_API_KEY environment variable is not set" in str(exc_info.value)
 
 
 

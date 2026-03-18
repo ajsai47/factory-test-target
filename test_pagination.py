@@ -4,12 +4,20 @@ from pagination import paginate
 
 
 def test_evenly_divisible_edge_case():
-    """Test the exact edge case: 10 items with page_size=5 should return exactly 2 pages."""
+    """Regression test for #12: evenly divisible items must not produce an extra empty page."""
     items = list(range(10))
     result = paginate(items, page_size=5)
     assert len(result) == 2
     assert result[0] == [0, 1, 2, 3, 4]
     assert result[1] == [5, 6, 7, 8, 9]
+    assert all(len(page) > 0 for page in result)
+
+
+def test_evenly_divisible_single_page():
+    """Regression test for #12: items exactly equal to page_size should produce one page."""
+    result = paginate([1, 2, 3], page_size=3)
+    assert len(result) == 1
+    assert result[0] == [1, 2, 3]
 
 
 def test_non_evenly_divisible():

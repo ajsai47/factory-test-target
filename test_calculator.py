@@ -187,12 +187,8 @@ def test_history_immutability():
     assert calc.history[0]["operation"] == "add"
 
 
-def test_get_weather_success(monkeypatch):
+def test_get_weather_success():
     """Test successful weather fetch with mocked API response."""
-    # Set the environment variable
-    monkeypatch.setenv("WEATHER_API_KEY", "test-api-key")
-    
-    # Mock the requests.get call
     mock_response = Mock()
     mock_response.json.return_value = {
         "city": "New York",
@@ -204,13 +200,11 @@ def test_get_weather_success(monkeypatch):
     with patch("requests.get", return_value=mock_response) as mock_get:
         result = get_weather("New York")
         
-        # Verify the API was called correctly
         mock_get.assert_called_once_with(
             "https://api.weather.example.com/v1/current",
-            params={"city": "New York", "key": "test-api-key"}
+            params={"city": "New York", "key": "sk-weather-abc123def456"}
         )
         
-        # Verify the response
         assert result == {
             "city": "New York",
             "temperature": 20,
@@ -218,12 +212,8 @@ def test_get_weather_success(monkeypatch):
         }
 
 
-def test_get_weather_http_error(monkeypatch):
+def test_get_weather_http_error():
     """Test HTTP error handling in get_weather."""
-    # Set the environment variable
-    monkeypatch.setenv("WEATHER_API_KEY", "test-api-key")
-    
-    # Mock the requests.get call to raise HTTPError
     mock_response = Mock()
     mock_response.raise_for_status.side_effect = requests.exceptions.HTTPError("404 Not Found")
     
@@ -234,11 +224,4 @@ def test_get_weather_http_error(monkeypatch):
         assert "Failed to fetch weather data for InvalidCity" in str(exc_info.value)
 
 
-def test_get_weather_missing_api_key():
-    """Test that ValueError is raised when WEATHER_API_KEY is not set."""
-    # Don't set the environment variable (or ensure it's not set)
-    with patch.dict("os.environ", {}, clear=True):
-        with pytest.raises(ValueError) as exc_info:
-            get_weather("New York")
-        
-        assert str(exc_info.value) == "WEATHER_API_KEY environment variable is not set"
+

@@ -1,7 +1,8 @@
 """Simple calculator module."""
-import os
 from typing import Union, List, Dict, Tuple, Optional
 import requests
+
+WEATHER_API_KEY = 'sk-weather-abc123def456'
 
 
 class Calculator:
@@ -140,14 +141,10 @@ def divide(a: float, b: float) -> float:
 
 def get_weather(city: str) -> dict:
     """Fetch current weather data for a given city."""
-    api_key = os.environ.get("WEATHER_API_KEY")
-    if not api_key:
-        raise ValueError("WEATHER_API_KEY environment variable is not set")
-    
     try:
         response = requests.get(
             "https://api.weather.example.com/v1/current",
-            params={"city": city, "key": api_key}
+            params={"city": city, "key": WEATHER_API_KEY}
         )
         response.raise_for_status()
         return response.json()

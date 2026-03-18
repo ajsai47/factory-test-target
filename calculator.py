@@ -1,5 +1,7 @@
 """Simple calculator module."""
+import os
 from typing import Union, List, Dict, Tuple, Optional
+import requests
 
 
 class Calculator:
@@ -134,3 +136,20 @@ def divide(a: float, b: float) -> float:
     if float(b) == 0:
         raise ValueError("Cannot divide by zero")
     return float(a) / float(b)
+
+
+def get_weather(city: str) -> dict:
+    """Fetch current weather data for a given city."""
+    api_key = os.environ.get("WEATHER_API_KEY")
+    if not api_key:
+        raise ValueError("WEATHER_API_KEY environment variable is not set")
+    
+    try:
+        response = requests.get(
+            "https://api.weather.example.com/v1/current",
+            params={"city": city, "key": api_key}
+        )
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.HTTPError as e:
+        raise requests.exceptions.HTTPError(f"Failed to fetch weather data for {city}: {str(e)}") from e

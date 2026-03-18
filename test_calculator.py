@@ -1,5 +1,6 @@
 """Tests for calculator module."""
-from calculator import add, subtract, multiply, divide
+import pytest
+from calculator import add, subtract, multiply, divide, factorial
 
 
 def test_add():
@@ -20,3 +21,15 @@ def test_multiply():
 def test_divide():
     assert divide(10, 2) == 5.0
     assert divide(7, 2) == 3.5
+
+
+def test_factorial():
+    assert factorial(0) == 1
+    assert factorial(1) == 1
+    assert factorial(5) == 120
+    assert factorial(10) == 3628800
+
+    with pytest.raises(ValueError):
+        factorial(-1)
+    with pytest.raises(ValueError):
+        factorial(-5)

@@ -19,3 +19,10 @@ def multiply(a: float, b: float) -> float:
 def divide(a: float, b: float) -> float:
     """Divide a by b."""
     return a / b
+
+
+def modulo(a: float, b: float) -> float:
+    """Return a modulo b."""
+    if b == 0:
+        raise ValueError("Cannot compute modulo with zero divisor")
+    return a % b

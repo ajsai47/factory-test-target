@@ -11,5 +11,10 @@ def hello() -> dict:
     return jsonify({"message": "hello from factory"})
 
 
+@app.route('/ping', methods=['GET'])
+def ping() -> dict:
+    return jsonify({"pong": True})
+
+
 if __name__ == "__main__":
     app.run(debug=True)

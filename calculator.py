@@ -19,3 +19,10 @@ def multiply(a: float, b: float) -> float:
 def divide(a: float, b: float) -> float:
     """Divide a by b."""
     return a / b
+
+
+def power(base: float, exp: float) -> float:
+    """Raise base to the power of exp."""
+    if base == 0 and exp < 0:
+        raise ValueError("Cannot raise zero to a negative power.")
+    return base ** exp

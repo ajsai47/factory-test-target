@@ -1,5 +1,5 @@
 """Tests for calculator module."""
-from calculator import add, subtract, multiply, divide
+from calculator import add, subtract, multiply, divide, power
 
 
 def test_add():
@@ -20,3 +20,16 @@ def test_multiply():
 def test_divide():
     assert divide(10, 2) == 5.0
     assert divide(7, 2) == 3.5
+
+
+def test_power():
+    assert power(2, 3) == 8
+    assert power(5, 0) == 1
+
+
+def test_power_zero_base_negative_exp():
+    try:
+        power(0, -1)
+        assert False, "Expected ValueError"
+    except ValueError:
+        pass

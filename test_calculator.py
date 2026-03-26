@@ -1,5 +1,6 @@
 """Tests for calculator module."""
-from calculator import add, subtract, multiply, divide
+import pytest
+from calculator import add, subtract, multiply, divide, modulo
 
 
 def test_add():
@@ -20,3 +21,10 @@ def test_multiply():
 def test_divide():
     assert divide(10, 2) == 5.0
     assert divide(7, 2) == 3.5
+
+
+def test_modulo():
+    assert modulo(10, 3) == 1
+    assert modulo(10, 5) == 0
+    with pytest.raises(ValueError):
+        modulo(10, 0)

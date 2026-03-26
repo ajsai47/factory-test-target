@@ -1,4 +1,5 @@
 """Simple calculator module."""
+import math
 
 
 def add(a: float, b: float) -> float:
@@ -19,3 +20,10 @@ def multiply(a: float, b: float) -> float:
 def divide(a: float, b: float) -> float:
     """Divide a by b."""
     return a / b
+
+
+def square_root(n: float) -> float:
+    """Return the square root of n."""
+    if n < 0:
+        raise ValueError("Cannot compute square root of negative number")
+    return math.sqrt(n)

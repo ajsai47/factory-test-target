@@ -1,5 +1,6 @@
 """Tests for calculator module."""
-from calculator import add, subtract, multiply, divide
+import pytest
+from calculator import add, subtract, multiply, divide, square_root
 
 
 def test_add():
@@ -20,3 +21,11 @@ def test_multiply():
 def test_divide():
     assert divide(10, 2) == 5.0
     assert divide(7, 2) == 3.5
+
+
+def test_square_root():
+    assert square_root(4) == 2.0
+    assert square_root(0) == 0.0
+    assert square_root(9) == 3.0
+    with pytest.raises(ValueError):
+        square_root(-1)
